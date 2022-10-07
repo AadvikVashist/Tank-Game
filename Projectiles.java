@@ -13,6 +13,7 @@ public class Projectiles {
     private int sy;
     private double lastangle;
     private double lasttime;
+    public boolean hitwall = false;
     public Projectiles(int x, int y, int w, int h, int xs, int angles) {
         rect = new Rectangle(x, y, w, h);
         v0 = xs;
@@ -52,20 +53,21 @@ public class Projectiles {
             if (Objects.isNull(lasttime)) {
                 lasttime = t;
             } else {
-                System.out.println(lastangle);
                 double[] abcd = calculate_xy(lasttime);
                 double rotx = abc[0] - abcd[0];
-                double roty = abc[1] - abc[1];
-                System.out.println(lasttime + " " + t);
-                double currot = -Math.atan(roty / rotx);
-                lastangle = currot;
+                double roty = abc[1] - abcd[1];
+                lastangle = -Math.atan(roty / rotx);
                 lasttime = t;
             }
+        }
+        else {
+            hitwall = true;
         }
     }
     public void draw(Graphics g) {
         g.setColor(getColor());
         Graphics2D g2 = (Graphics2D) g;
+        if (hitwall == false) {
         Rectangle2D.Double rects = new Rectangle2D.Double(rect.x, rect.y, rect.width, rect.height);
         // AffineTransform old = g2d.getTransform();
         //
@@ -73,16 +75,10 @@ public class Projectiles {
         // g2d.setTransform(old);
         g2.rotate(lastangle, rect.x, rect.y);
         g2.fillRect(rect.x, rect.y, rect.width, rect.height);
+        }
     }
     public double displacement(double v0, double t, double a) {
         return v0 * t + 0.5 * a * t * t;
     }
 
 }
-
-// constant for Earth's gravity acceleration in meters/second^2
-
-// returns the displacement for a body under acceleration
-
-// prints a table showing the trajectory of an object given
-// its initial velocity v and angle and number of steps

@@ -14,12 +14,13 @@ import java.awt.event.*;
 
 public class TankGame extends JPanel implements ActionListener, KeyListener {
     private long startTime;
+    private long startTimeT;
     // private Rectangle player = new Rectangle(); //a rectangle that represents the player
     // private Rectangle goal = new Rectangle(); //a rectangle that represents the goal
     // private Enemy[] enemies = new Enemy[5]; //the array of Enemy objects
     // private Rectangle floor = new Rectangle();
     public Background bg;
-    private boolean up, down, left, right; //booleans that track which keys are currently pressed
+    private boolean left, right, space; //booleans that track which keys are currently pressed
     private Timer timer; //the update timer
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private int gameWidth = 1440; //the width of the game area
@@ -29,8 +30,9 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     public Goal b = new Goal();
     public Projectiles a;
     public double temptime = 0;
-    private double speedTime = 1.25;
+    private double speedTime = 1.25;   
     public Tank player;
+
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
         // GraphicsEnvironment graphics =
@@ -41,12 +43,13 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         frame.setLayout(new BorderLayout());
         
         TankGame game = new TankGame();
+        
         frame.add(game, BorderLayout.CENTER);
         
         game.addKeyListener(game);
         frame.addKeyListener(game);
         
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         // frame.setUndecorated(false);
@@ -59,7 +62,9 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     //Constructor for the game panel
     public TankGame() {
         setPreferredSize(new Dimension(gameWidth, gameHeight));
-        bg = new Background();
+        bg = new Background(gameWidth, gameHeight);
+        player = new Tank(1.0, 50, gameHeight-100);
+        startTime = System.currentTimeMillis();
     }
     
     //Method that is called by the timer 30 times per second (roughly)
@@ -73,14 +78,14 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     //Stores the down state for use in the update method
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
-            a = new Projectiles(100, 100, 50, 20, 30, 45);
+            space = true;
         }
-        if(e.getKeyCode() == KeyEvent.VK_UP) {
-            up = true;
-        }
-        else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-            down = true;
-        }
+        // if(e.getKeyCode() == KeyEvent.VK_UP) {
+        //     up = true;
+        // }
+        // else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+        //     down = true;
+        // }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             left = true;
         }
@@ -93,13 +98,17 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     //Called every time a key is released
     //Stores the down state for use in the update method
     public void keyReleased(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_UP) {
-            up = false;
+        // if(e.getKeyCode() == KeyEvent.VK_UP) {
+        //     up = false;
+        // }
+        // else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+        //     down = false;
+        // }
+        // else 
+        if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+            space = false;
         }
-        else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-            down = false;
-        }
-        else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+        if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             left = false;
         }
         else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -124,100 +133,50 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         timer = new Timer(1000 / 60, this); //roughly 30 frames per second
         timer.start();
         
-        up = down = left = right = false;
+        left = right = false;
     
     }
     public void update() {
         // int vertical_speed = 0;
         // int vertical_position;  
-        if(up) {
-            player.y-=3;
-        }
-        if(down) {
-            player.y+=3;
-        }
-        if(left) {
-            player.x-=3;
-        }
-        if(right) {
-            player.x+=3;
-        }
-        
-        if(player.x < 0) {
-            player.x = 0;
-            player.startT = (double) (System.currentTimeMillis() - startTime) /(speedTime*100);
+        // if(up) {
+        //     player.moveY(-3,bg);
+        // }
+        // if(down) {
+        //     player.moveY(3,bg);
+        // }
+        if (space){
+            a = new Projectiles(player.rect.x, player.rect.y, 50, 20, 50, 35);
 
         }
-        else if(player.x + player.width > gameWidth) {
-            player.x = gameWidth - player.width;
+        if(left) {
+            player.moveX(-3,bg);
+        }
+        if(right) {
+            player.moveX(3,bg);
         }
         
-        if(player.y < 0) {
-            player.y = 0;
-        }
-        else if(player.y + player.height > gameHeight) {
-            player.y = gameHeight - player.height;
-        }
-        // if(player.intersects(goal)) {
-        //     JOptionPane.showMessageDialog(null, "You won!");
-        //     setUpGame();
-        // }
-        
-        // for(Enemy e: enemies) {
-        //     if(e == null)
-        //         continue;
-        
-        //     if(e.intersects(player)) {
-        //         JOptionPane.showMessageDialog(null, "You lost");
-        //         setUpGame();
-        //     }
-            
-        //     e.move();
-        // }
+
         
     }
     
-    //The paint method does 3 things
-    //1 - it draws a white background
-    //2 - it draws the player in blue
-    //3 - it draws the goal in green
-    //4 - it draws all the Enemy objects
-    
+
     public void paint(Graphics g) {
-        /* 
         
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, gameWidth, gameHeight);
-        g.setColor(Color.GRAY);
-        Color tankColor = new Color(1, 50, 32);
-        g.setColor(tankColor);
-        g.fillRect(player.x, player.y + (player.height/3) + 3, player.width, player.height/3);
-        g.fillRect(player.x + (player.width/4), player.y + 3, player.width/2, player.height/3);
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(player.x, player.y  + (3*player.height/4), player.width, player.height/4);
-        */
-        player.move(bg,  (System.currentTimeMillis() - startTime) /(speedTime*100));
+        if (player.dropping) player.move(bg,  (System.currentTimeMillis() - startTime) /(speedTime*100), speedTime);
         player.draw(g);
         bg.draw(g);
-        if (Objects.isNull(a) == false){
-            a.move((double) (System.currentTimeMillis() - startTime) /(speedTime*100), bg);
-            // System.out.println((System.currentTimeMillis() - startTime) / 100);
+        if (Objects.isNull(a) == false && !a.hitwall){
+            a.move((double) (System.currentTimeMillis() - startTimeT) /(speedTime*100), bg);
             a.draw(g);
         }
+        // else if(a.hitwall){
+        //     a = null;
+        // }
         else{
-            startTime = System.currentTimeMillis();
+            startTimeT = System.currentTimeMillis();
 
         }
-        // g.setColor(Color.GREEN);
-        // g.fillRect(goal.x, goal.y, goal.width, goal.height);
-
-        // g.fillRect(floor.x, floor.y, floor.width, floor.height);
-        
-        // for(Enemy e: enemies) {
-        //     if(e == null)
-        //         continue;
-        //     e.draw(g);
-        // }
     }
 
 }
