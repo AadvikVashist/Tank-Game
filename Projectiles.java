@@ -62,6 +62,7 @@ public class Projectiles {
         }
         else {
             hitwall = true;
+            System.out.println("hitwall");
         }
     }
     public void draw(Graphics g) {

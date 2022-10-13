@@ -18,8 +18,15 @@ public class Background {
         }
     public boolean intersects(Rectangle P){
     if (ground.intersects(P) || leftwall.intersects(P) || rightwall.intersects(P) || topwall.intersects(P)) return true;
+    else if(P.x < 0 || P.y < 0 || P.x+P.width > gameWidth || P.y+P.height > gameHeight) return true;
     else return false;
     }
+
+    public boolean intersectsGoal(Rectangle P){
+        if (ground.intersects(P) || leftwall.intersects(P) || rightwall.intersects(P) || topwall.intersects(P)) return true;
+        else if(P.x < 0 || P.y < 0 || P.x+P.width > gameWidth || P.y+P.height > gameHeight-200) return true;
+        else return false;
+        }
     public boolean groundIntersects(Rectangle P){
         if (leftwall.intersects(P) || rightwall.intersects(P) || topwall.intersects(P)) return true;
         else return false;
