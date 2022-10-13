@@ -35,6 +35,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     public int angle = 45;
     public int velocity = 50;
     int space_counter = 0;
+    public int score = 0;
 
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
@@ -42,6 +43,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         // GraphicsEnvironment.getLocalGraphicsEnvironment();
         // GraphicsDevice device = graphics.getDefaultScreenDevice();
         JFrame frame = new JFrame();
+        System.out.println("hi");
         frame.setTitle("Tank Game");
         frame.setLayout(new BorderLayout());
         
@@ -51,7 +53,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         
         game.addKeyListener(game);
         frame.addKeyListener(game);
-        
+
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -60,6 +62,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         frame.setState(Frame.NORMAL);
         // device.setFullScreenWindow(frame);
         game.setUpGame();
+        
     }
     
     //Constructor for the game panel
@@ -183,7 +186,6 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
             space_counter+=1;
         }
         if (space && space_counter != 0 && a.hitwall == true){
-            System.out.println("new projectile");
             a = new Projectiles(player.rect.x, player.rect.y, 50, 20, velocity,angle);
         }
         if(left) {
@@ -206,6 +208,10 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         b.move((System.currentTimeMillis() - startTime) /(1000), bg);
         b.draw(g);
         if (Objects.isNull(a) == false && !a.hitwall){
+            if (b.intersectsGoal(a.rect)){
+                a.hitwall = true;
+                score +=1;
+            }
             a.move((double) (System.currentTimeMillis() - startTimeT) /(100), bg);
             a.draw(g);
         }

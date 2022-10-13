@@ -40,6 +40,9 @@ public class Goal {
         if(a.intersectsGoal(rect)) rect.y-=y;
         
     }
+    public boolean intersectsGoal(Rectangle rects){
+        return rect.intersects(rects);
+    }
     public void move(double t, Background a) {
         if ((int) t > second){
             second += 1;
@@ -50,7 +53,6 @@ public class Goal {
         }
         this.movex((int)pathx, a);
         this.movey((int)pathy, a);
-        System.out.println(pathx + "  " + pathy);
     }
     
     public Rectangle getRectangle() {

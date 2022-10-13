@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
 public class Projectiles {
-    private Rectangle rect;
+    public Rectangle rect;
     private int v0;
     private double g = -1.8;
     private double theta;
@@ -62,7 +62,6 @@ public class Projectiles {
         }
         else {
             hitwall = true;
-            System.out.println("hitwall");
         }
     }
     public void draw(Graphics g) {

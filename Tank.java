@@ -51,7 +51,6 @@ public class Tank {
         
     }
     public void move(Background a, double t, double speedTime) { // time
-        System.out.println(rect.x + "  " + rect.y);
         if (!a.groundIntersects((rect))  && dropping) {
             int abc = calculate_xy(t-startT);
             dropping = this.moveY(-abc, a);
