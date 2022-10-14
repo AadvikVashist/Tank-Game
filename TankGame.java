@@ -70,7 +70,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     public TankGame() {
         setPreferredSize(new Dimension(gameWidth, gameHeight));
         bg = new Background(gameWidth, gameHeight);
-        player = new Tank(2.0, 50, gameHeight-100);
+        player = new Tank(4.0, 100, gameHeight-100);
         b = new Goal(500,500,80,80,50,50,60);
         startTime = System.currentTimeMillis();
     }
@@ -207,7 +207,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         player.draw(g);
         final Image image = new ImageIcon("tank.png").getImage();
         Graphics2D g2 = (Graphics2D) g;
-        
+
         g2.drawImage(image, player.rect.x, player.rect.y, player.rect.width, player.rect.height, frame);
         bg.draw(g);
         b.move((System.currentTimeMillis() - startTime) /(1000), bg);
