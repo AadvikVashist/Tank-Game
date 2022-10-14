@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.Objects;
 import java.awt.event.*;
+// import java.awt.Image.BufferedImage;
 // import java.util.concurrent.TimeUnit;
 
 /*
@@ -36,13 +37,14 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     public int velocity = 50;
     int space_counter = 0;
     public int score = 0;
+    static JFrame frame;
 
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
         // GraphicsEnvironment graphics =
         // GraphicsEnvironment.getLocalGraphicsEnvironment();
         // GraphicsDevice device = graphics.getDefaultScreenDevice();
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         System.out.println("hi");
         frame.setTitle("Tank Game");
         frame.setLayout(new BorderLayout());
@@ -62,15 +64,14 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         frame.setState(Frame.NORMAL);
         // device.setFullScreenWindow(frame);
         game.setUpGame();
-        
     }
     
     //Constructor for the game panel
     public TankGame() {
         setPreferredSize(new Dimension(gameWidth, gameHeight));
         bg = new Background(gameWidth, gameHeight);
-        player = new Tank(1.0, 50, gameHeight-100);
-        b = new Goal(500,500,80,80,200,200,60);
+        player = new Tank(2.0, 50, gameHeight-100);
+        b = new Goal(500,500,80,80,50,50,60);
         startTime = System.currentTimeMillis();
     }
     
@@ -87,16 +88,16 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             space = true;
         }
-        if(e.getKeyCode() == KeyEvent.VK_UP) {
+        if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             up = true;
         }
-        else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+        else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
             down = true;
         }
-        else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+        else if(e.getKeyCode() == KeyEvent.VK_A) {
             left = true;
         }
-        else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        else if(e.getKeyCode() == KeyEvent.VK_D) {
             right = true;
         }
         else if(e.getKeyCode() == KeyEvent.VK_W) {
@@ -112,20 +113,20 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     //Stores the down state for use in the update method
     public void keyReleased(KeyEvent e) {
 
-        if(e.getKeyCode() == KeyEvent.VK_UP) {
+        if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             up = false;
         }
-        else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+        else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
             down = false;
         }
         else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             space = false;
             space_counter += 1;
         }
-        else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+        else if(e.getKeyCode() == KeyEvent.VK_A) {
             left = false;
         }
-        else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        else if(e.getKeyCode() == KeyEvent.VK_D) {
             right = false;
         }
         else if(e.getKeyCode() == KeyEvent.VK_W) {
@@ -150,7 +151,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
             timer.stop();
         }
     
-        timer = new Timer(1000 / 60, this); //roughly 30 frames per second
+        timer = new Timer(1000 / 120, this); //roughly 30 frames per second
         timer.start();
         
         left = right = false;
@@ -182,11 +183,11 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
             angle -= 1;
         }
         if (space && space_counter == 0){
-            a = new Projectiles(player.rect.x, player.rect.y, 50, 20, velocity, angle);
+            a = new Projectiles(player.rect.x+player.center, player.rect.y, 50, 20, velocity, angle);
             space_counter+=1;
         }
         if (space && space_counter != 0 && a.hitwall == true){
-            a = new Projectiles(player.rect.x, player.rect.y, 50, 20, velocity,angle);
+            a = new Projectiles(player.rect.x+player.center, player.rect.y, 50, 20, velocity,angle);
         }
         if(left) {
             player.moveX(-3,bg);
@@ -204,6 +205,10 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         
         if (player.dropping) player.move(bg,  (System.currentTimeMillis() - startTime) /(speedTime*100), speedTime);
         player.draw(g);
+        final Image image = new ImageIcon("tank.png").getImage();
+        Graphics2D g2 = (Graphics2D) g;
+        
+        g2.drawImage(image, player.rect.x, player.rect.y, player.rect.width, player.rect.height, frame);
         bg.draw(g);
         b.move((System.currentTimeMillis() - startTime) /(1000), bg);
         b.draw(g);

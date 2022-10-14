@@ -63,7 +63,7 @@ public class Goal {
         g.setColor(getColor());
         g.fillRect(rect.x, rect.y, rect.width, rect.height);
         g.setColor(Color.BLACK);
-        g.fillOval(centerX-5, centerY-5, 10, 10);
+        // g.fillOval(centerX-5, centerY-5, 10, 10);
     
     }
 }

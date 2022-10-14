@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.lang.Math;
-public class Tank {
+
+public class Tank{
     public Rectangle rect;
     private int v0;
     private double g = -1.8;
@@ -9,11 +10,13 @@ public class Tank {
     public int height;
     public double [] abc;
     public double startT;
+    public int center;
     boolean dropping = true;
     public Tank(double size, int x, int y) {
         width = (int)(50*size);
         height = (int)(30*size);
         rect = new Rectangle(x, y, width, height);
+        center = width/2;
         v0 = 0;
     }
     public Color getColor() {
@@ -60,6 +63,12 @@ public class Tank {
         Color tankColor = new Color(1, 50, 32);
         g.setColor(tankColor);
         g.fillRect(rect.x,rect.y, width, height);
+        g.setColor(Color.WHITE);
+        g.fillRect(rect.x,rect.y,width/3,height/2);
+        g.fillRect(rect.x+2*width/3,rect.y,width/3,height/2);
+
+
+
     }
     public double displacement(double v0, double t, double a) {
         return v0 * t + 0.5 * a * t * t;

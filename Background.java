@@ -1,7 +1,5 @@
 import java.awt.*;
-import javax.swing.*;
-import java.util.Objects;
-import java.awt.event.*;
+
 public class Background {
     public Rectangle ground;
     public Rectangle leftwall;
@@ -43,7 +41,6 @@ public class Background {
             return Color.GREEN;
         }
     public void draw(Graphics g){
-        g.drawImage(new ImageIcon("tankBg.png"),0,0, null);
 
         // ground
         g.fillRect(ground.x,ground.y,ground.width,ground.height);
