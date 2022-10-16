@@ -2,7 +2,7 @@ import java.awt.*;
 public class Goal {
 
     private int centerX, centerY;
-    private Rectangle rect;
+    public Rectangle rect;
     public int second;
     private int fps;
     public int movex;

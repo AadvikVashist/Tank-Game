@@ -48,7 +48,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         System.out.println("hi");
         frame.setTitle("Tank Game");
         frame.setLayout(new BorderLayout());
-        
+        JLabel label1 = new JLabel("Score : 0");
         TankGame game = new TankGame();
         
         frame.add(game, BorderLayout.CENTER);
@@ -71,7 +71,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         setPreferredSize(new Dimension(gameWidth, gameHeight));
         bg = new Background(gameWidth, gameHeight);
         player = new Tank(4.0, 100, gameHeight-100);
-        b = new Goal(500,500,80,80,50,50,60);
+        b = new Goal(500,500,80,80,100,100,60);
         startTime = System.currentTimeMillis();
     }
     
@@ -183,11 +183,11 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
             angle -= 1;
         }
         if (space && space_counter == 0){
-            a = new Projectiles(player.rect.x+player.center, player.rect.y, 50, 20, velocity, angle);
+            a = new Projectiles(player.rect.x+player.width, player.rect.y, 50, 20, velocity, angle);
             space_counter+=1;
         }
         if (space && space_counter != 0 && a.hitwall == true){
-            a = new Projectiles(player.rect.x+player.center, player.rect.y, 50, 20, velocity,angle);
+            a = new Projectiles(player.rect.x+player.width, player.rect.y, 50, 20, velocity,angle);
         }
         if(left) {
             player.moveX(-3,bg);
@@ -202,16 +202,20 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     
 
     public void paint(Graphics g) {
-        
-        if (player.dropping) player.move(bg,  (System.currentTimeMillis() - startTime) /(speedTime*100), speedTime);
-        player.draw(g);
-        final Image image = new ImageIcon("tank.png").getImage();
+        final Image images = new ImageIcon("tankBg.png").getImage(); //You need this
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.drawImage(image, player.rect.x, player.rect.y, player.rect.width, player.rect.height, frame);
+        g2.drawImage(images, 0, 0, gameWidth,gameHeight, frame); //to this
+        if (player.dropping) player.move(bg,  (System.currentTimeMillis() - startTime) /(speedTime*100), speedTime);
+        player.draw(g);
+        final Image image = new ImageIcon("tank.png").getImage(); //You need this
+        
+        g2.drawImage(image, player.rect.x, player.rect.y, player.rect.width, player.rect.height, frame); //to this
         bg.draw(g);
         b.move((System.currentTimeMillis() - startTime) /(1000), bg);
         b.draw(g);
+        final Image imager = new ImageIcon("Hoop.jpeg").getImage(); //You need this
+        g2.drawImage(imager, b.rect.x, b.rect.y, b.rect.width,b.rect.height, frame); //to this
         if (Objects.isNull(a) == false && !a.hitwall){
             if (b.intersectsGoal(a.rect)){
                 a.hitwall = true;
