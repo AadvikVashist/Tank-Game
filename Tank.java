@@ -12,6 +12,8 @@ public class Tank {
     public int center;
     public double size;
     boolean dropping = true;
+    public boolean last_move_right = true;
+
     public Tank(double s, int x, int y) {
         size = s;
         width = (int)(50*size);
@@ -39,6 +41,7 @@ public class Tank {
     public void moveX(int xa, Background a){
         if ((a.leftwallIntersects(rect) && xa < 0) || (a.rightwallIntersects(rect) && xa > 0)) return;
         rect.x += xa;
+        last_move_right = (xa > 0);
     }
     public boolean moveY(int ya, Background a){
         rect.y += ya;

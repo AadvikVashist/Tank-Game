@@ -33,12 +33,13 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     public double temptime = 0;
     private double speedTime = 1.25;   
     public Tank player;
-    public int angle = 45;
+    public int angle = 0;
     public int velocity = 50;
     int space_counter = 0;
-    public int score = 0;
+    public static int score = 0;
     static JFrame frame;
-
+    private int xoffset;  private int yoffset;
+    private JLabel scores;
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
         // GraphicsEnvironment graphics =
@@ -48,11 +49,10 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         System.out.println("hi");
         frame.setTitle("Tank Game");
         frame.setLayout(new BorderLayout());
-        JLabel label1 = new JLabel("Score : 0");
+
         TankGame game = new TankGame();
         
         frame.add(game, BorderLayout.CENTER);
-        
         game.addKeyListener(game);
         frame.addKeyListener(game);
 
@@ -168,7 +168,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         // }
         if (speedup){
             velocity +=1;
-            if (velocity > 300)  velocity = 300;
+            if (velocity > 100)  velocity = 100;
 
         }
         if (speedown){
@@ -178,16 +178,19 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         }
         if (up){
             angle+=1;
+            if (angle >180) angle = 180;
+
         }
         if (down){
             angle -= 1;
+            if (angle < 0) angle = 0;
         }
         if (space && space_counter == 0){
-            a = new Projectiles(player.rect.x+player.width, player.rect.y, 50, 20, velocity, angle);
+            a = new Projectiles(player.rect.x+xoffset, player.rect.y+yoffset, 50, 10, velocity, angle);
             space_counter+=1;
         }
         if (space && space_counter != 0 && a.hitwall == true){
-            a = new Projectiles(player.rect.x+player.width, player.rect.y, 50, 20, velocity,angle);
+            a = new Projectiles(player.rect.x+xoffset, player.rect.y+yoffset, 50, 10, velocity,angle);
         }
         if(left) {
             player.moveX(-3,bg);
@@ -204,22 +207,81 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     public void paint(Graphics g) {
         final Image images = new ImageIcon("tankBg.png").getImage(); //You need this
         Graphics2D g2 = (Graphics2D) g;
+        
 
         g2.drawImage(images, 0, 0, gameWidth,gameHeight, frame); //to this
         if (player.dropping) player.move(bg,  (System.currentTimeMillis() - startTime) /(speedTime*100), speedTime);
         player.draw(g);
-        final Image image = new ImageIcon("tank.png").getImage(); //You need this
+        Image bottom;
+        Image top;
+        Image turret = new ImageIcon("tankTurret.png").getImage();
+        if (player.last_move_right){
+            bottom = new ImageIcon("tankBodyRight.png").getImage(); //You need this
+            g2.drawImage(bottom, player.rect.x, player.rect.y, player.rect.width, player.rect.height, frame); //to this
+        }
+        else{
+            bottom = new ImageIcon("tankBodyLeft.png").getImage(); //You need this
+            g2.drawImage(bottom, player.rect.x, player.rect.y, player.rect.width, player.rect.height, frame); //to this
+        }
+        int w = (int)((double)turret.getWidth(frame) / (double)bottom.getWidth(frame)*(double)player.rect.width);
+        int h = (int)((double)turret.getHeight(frame) / (double)bottom.getHeight(frame)*(double)player.rect.height);
+        Graphics copy = g.create();
+        int xoff; int yoff;
+        if (angle < 90){
+            top = new ImageIcon("tankTopRight.png").getImage(); //You need this
+            g2.drawImage(top, player.rect.x, player.rect.y, player.rect.width, player.rect.height, frame); //to this
+            Graphics2D g3 = (Graphics2D) copy;
+            xoff = (int)((double)player.rect.width*0.68);
+            yoff = (int)((double)player.rect.height*0.1);
+            g3.rotate(Math.toRadians(-angle),  player.rect.x+ xoff, player.rect.y+ yoff+ (double)turret.getHeight(frame)/2);
+            g3.drawImage(turret,player.rect.x+ xoff, player.rect.y+ yoff, w, h, frame);
+        }
+        else{
+            top = new ImageIcon("tankTopLeft.png").getImage(); //You need this
+            g2.drawImage(top, player.rect.x, player.rect.y, player.rect.width, player.rect.height, frame); //to this
+            Graphics2D g3 = (Graphics2D) copy;
+            xoff = (int)((double)player.rect.width/3.4);
+            yoff = (int)((double)player.rect.height*0.1+turret.getHeight(frame)*0.5);
+            g3.rotate(Math.toRadians(-angle),  player.rect.x+ xoff, player.rect.y+ yoff+ (double)turret.getHeight(frame)/2);
+            g3.drawImage(turret,player.rect.x+ xoff, player.rect.y+ yoff, w, h, frame);
+        }
+        xoffset = xoff + (int)(turret.getWidth(frame)*Math.acos(Math.toRadians(angle))*1.5);
+        yoffset = yoff + (int)(turret.getWidth(frame)*Math.asin(Math.toRadians(angle))*1.5);
+        copy.dispose();
+        // if (angle < 90){
+        //     image = new ImageIcon("tankBodyRight.png").getImage(); //You need this
+        //     int w = (int)((double)top.getWidth(frame) / (double)image.getWidth(frame)*(double)player.rect.width);
+        //     int h = (int)((double)top.getHeight(frame) / (double)image.getHeight(frame)*(double)player.rect.height);
+        //     g3.rotate(Math.toRadians(-angle),  player.rect.x+ player.rect.width/2+40, player.rect.y+10+h/2);
+        //     g3.drawImage(top, player.rect.x+ player.rect.width/2+40,  player.rect.y+10, w, h, frame); //to this
+        // }
+        // else{
+        //     image = new ImageIcon("tankBodyLeft.png").getImage(); //You need thisddddd
+        //     int w = (int)((double)top.getWidth(frame) / (double)image.getWidth(frame)*(double)player.rect.width);
+        //     int h = (int)((double)top.getHeight(frame) / (double)image.getHeight(frame)*(double)player.rect.height);
+        //     g3.rotate(Math.toRadians(-angle),  player.rect.x+40, player.rect.y+10+h/2);
+        //     g3.drawImage(top, player.rect.x +40,  player.rect.y+10, w, h, frame); //to this
+        // }
+        System.out.println(score);
         
-        g2.drawImage(image, player.rect.x, player.rect.y, player.rect.width, player.rect.height, frame); //to this
         bg.draw(g);
         b.move((System.currentTimeMillis() - startTime) /(1000), bg);
         b.draw(g);
         final Image imager = new ImageIcon("Hoop.jpeg").getImage(); //You need this
         g2.drawImage(imager, b.rect.x, b.rect.y, b.rect.width,b.rect.height, frame); //to this
+        
+        if (Objects.isNull(scores)){
+            scores = new JLabel("Score : " + 0);
+            frame.add(scores, BorderLayout.NORTH);
+        }
         if (Objects.isNull(a) == false && !a.hitwall){
             if (b.intersectsGoal(a.rect)){
                 a.hitwall = true;
+                
+                frame.add(scores, BorderLayout.NORTH);
                 score +=1;
+                scores.setText("Score : " + score);
+
             }
             a.move((double) (System.currentTimeMillis() - startTimeT) /(100), bg);
             a.draw(g);
