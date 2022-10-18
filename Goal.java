@@ -3,8 +3,8 @@ public class Goal {
     public Rectangle rect;
     public int second;
     private int fps;
-    public int movex;
-    public int movey;
+    public double movex;
+    public double movey;
     public double pathx;
     public double pathy;
     public int angle;
@@ -45,16 +45,18 @@ public class Goal {
     public boolean intersectsGoal(Rectangle rects){
         return rect.intersects(rects);
     }
-    public void move(double t, Background a) {
+    public void move(double t, Background a, int counter) {
         if ((int) t > second){
             second += 1;
-            pathx = ((Math.random()/2+1)*movex/fps);
-            pathy = ((Math.random()/2+1)*movey/fps);
+            pathx = ((Math.random()/2+1)*movex/fps)*8;
+            pathy = ((Math.random()/2+1)*movey/fps)*8;
             if (Math.random() < 0.5) pathx *= -1;
             if (Math.random() < 0.5) pathy *= -1;
         }
+        if (counter % 8 == 0){
         this.movex((int)pathx, a);
         this.movey((int)pathy, a);
+        }
     }
     
     public Rectangle getRectangle() {

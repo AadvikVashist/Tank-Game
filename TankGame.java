@@ -41,6 +41,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     private int xoffset;  private int yoffset;
     private JLabel scores;
     public int abcdefg = 0;
+    public int update_count = 0;
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
         // GraphicsEnvironment graphics =
@@ -72,8 +73,9 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         setPreferredSize(new Dimension(gameWidth, gameHeight));
         bg = new Background(gameWidth, gameHeight);
         player = new Tank(4.0, 100, gameHeight-100);
-        b = new Goal(100,60,120,80,100,50,60);
+        b = new Goal(100,60,120,80,200,80,480);
         startTime = System.currentTimeMillis();
+        
     }
     
     //Method that is called by the timer 30 times per second (roughly)
@@ -152,13 +154,15 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
             timer.stop();
         }
     
-        timer = new Timer(1000 / 120, this); //roughly 30 frames per second
+        timer = new Timer(1000 / 480, this); //roughly 30 frames per second
         timer.start();
         
         left = right = false;
     
     }
     public void update() {
+
+        update_count +=1;
         // int vertical_speed = 0;
         // int vertical_position;  
         // if(up) {
@@ -167,6 +171,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         // if(down) {
         //     player.moveY(3,bg);
         // }
+        if (update_count % 8 == 0 ){
         if (speedup){
             velocity +=1;
             if (velocity > 100)  velocity = 100;
@@ -199,7 +204,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         if(right) {
             player.moveX(3,bg);
         }
-        
+    }   
 
         
     }
@@ -264,7 +269,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         //     g3.drawImage(top, player.rect.x +40,  player.rect.y+10, w, h, frame); //to this
         // }
         bg.draw(g);
-        b.move((System.currentTimeMillis() - startTime) /(1000), bg);
+        b.move((System.currentTimeMillis() - startTime) /(1000), bg, update_count);
         b.draw(g);
         final Image imager = new ImageIcon("Hoop.png").getImage(); //You need this
         g2.drawImage(imager, b.rect.x+10, b.rect.y-10, b.rect.width-20,b.rect.height-20, frame); //to this
