@@ -40,6 +40,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     static JFrame frame;
     private int xoffset;  private int yoffset;
     private JLabel scores;
+    public int abcdefg;
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
         // GraphicsEnvironment graphics =
@@ -269,23 +270,29 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         b.draw(g);
         final Image imager = new ImageIcon("Hoop.png").getImage(); //You need this
         g2.drawImage(imager, b.rect.x+10, b.rect.y-10, b.rect.width-20,b.rect.height-20, frame); //to this
-        
+        boolean argser = true;
         if (Objects.isNull(scores)){
-            scores = new JLabel("Score : " + 0);
+            scores = new JLabel("Score : " + 0 + "\n                 Time = 0");
             frame.add(scores, BorderLayout.NORTH);
         }
         if (Objects.isNull(a) == false && !a.hitwall){
             if (b.intersectsGoal(a.rect)){
                 a.hitwall = true;
-                
+                argser = false;
                 frame.add(scores, BorderLayout.NORTH);
                 score +=1;
-                scores.setText("Score : " + score);
+                scores.setText("Score : " + score + "\n                 Time = " +(int) ((System.currentTimeMillis() - startTime) / 1000));
 
             }
             a.move((double) (System.currentTimeMillis() - startTimeT) /(100), bg);
             a.draw(g);
         }
+        // if (argser && abcdefg < ((System.currentTimeMillis() - startTime) / 1000)){
+        //     abcdefg +=1;
+        //     frame.add(scores, BorderLayout.NORTH);
+        //     scores.setText("Score : " + score + "\n                 Time = " +(int) ((System.currentTimeMillis() - startTime) / 1000));
+        // }
+
         // else if(a.hitwall){
         //     a = null;
         // }
@@ -296,6 +303,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         if ((System.currentTimeMillis() - startTime) / 1000 > 40){
             frame.setVisible(false);
             frame.dispose();
+            // Gameend(); //funsies
 
         } 
     }
