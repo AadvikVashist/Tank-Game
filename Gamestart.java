@@ -43,7 +43,7 @@ public class Gamestart {
         //Set size and colors
         Border border = BorderFactory.createLineBorder(Color.black, 5);
 
-        instructions.setPreferredSize(new Dimension(400, 200));
+        instructions.setPreferredSize(new Dimension(00, 200));
         // instructions.setForeground(Color. RED);
         instructions.setBackground(Color.lightGray);
         instructions.setOpaque(true);
@@ -90,4 +90,5 @@ public class Gamestart {
         frame.setVisible(true);
         
     }
+    
 }

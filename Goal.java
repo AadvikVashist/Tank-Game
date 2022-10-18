@@ -1,7 +1,5 @@
 import java.awt.*;
 public class Goal {
-
-    private int centerX, centerY;
     public Rectangle rect;
     public int second;
     private int fps;
@@ -17,8 +15,6 @@ public class Goal {
     }
     public Goal(int cX, int cY, int w, int h, int movx, int movy, int fp) {
         rect = new Rectangle(cX, cY,w,h);
-        centerX = cX;
-        centerY = cY;
         movey = movy;
         movex = movx;
         fps = fp;

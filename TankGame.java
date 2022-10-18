@@ -40,7 +40,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
     static JFrame frame;
     private int xoffset;  private int yoffset;
     private JLabel scores;
-    public int abcdefg;
+    public int abcdefg = 0;
     //Sets up the basic GUI for the game
     public static void main(String[] args) {
         // GraphicsEnvironment graphics =
@@ -263,14 +263,12 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         //     g3.rotate(Math.toRadians(-angle),  player.rect.x+40, player.rect.y+10+h/2);
         //     g3.drawImage(top, player.rect.x +40,  player.rect.y+10, w, h, frame); //to this
         // }
-        System.out.println(score);
-        
         bg.draw(g);
         b.move((System.currentTimeMillis() - startTime) /(1000), bg);
         b.draw(g);
         final Image imager = new ImageIcon("Hoop.png").getImage(); //You need this
         g2.drawImage(imager, b.rect.x+10, b.rect.y-10, b.rect.width-20,b.rect.height-20, frame); //to this
-        boolean argser = true;
+        // boolean argser = true;
         if (Objects.isNull(scores)){
             scores = new JLabel("Score : " + 0 + "\n                 Time = 0");
             frame.add(scores, BorderLayout.NORTH);
@@ -278,7 +276,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         if (Objects.isNull(a) == false && !a.hitwall){
             if (b.intersectsGoal(a.rect)){
                 a.hitwall = true;
-                argser = false;
+                // argser = false;
                 frame.add(scores, BorderLayout.NORTH);
                 score +=1;
                 scores.setText("Score : " + score + "\n                 Time = " +(int) ((System.currentTimeMillis() - startTime) / 1000));
@@ -286,25 +284,30 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
             }
             a.move((double) (System.currentTimeMillis() - startTimeT) /(100), bg);
             a.draw(g);
+            if (abcdefg < ((System.currentTimeMillis() - startTime) / 1000)){
+                abcdefg +=1;
+                frame.add(scores, BorderLayout.NORTH);
+                scores.setText("Score : " + score + "\n                 Time = " +(int) ((System.currentTimeMillis() - startTime) / 1000));
+            }
         }
-        // if (argser && abcdefg < ((System.currentTimeMillis() - startTime) / 1000)){
-        //     abcdefg +=1;
-        //     frame.add(scores, BorderLayout.NORTH);
-        //     scores.setText("Score : " + score + "\n                 Time = " +(int) ((System.currentTimeMillis() - startTime) / 1000));
-        // }
+        else if (abcdefg < ((System.currentTimeMillis() - startTime) / 1000)){
+            abcdefg +=1;
+            frame.add(scores, BorderLayout.NORTH);
+            scores.setText("Score : " + score + "\n                 Time = " +(int) ((System.currentTimeMillis() - startTime) / 1000));
+        }
 
         // else if(a.hitwall){
         //     a = null;
         // }
         else{
             startTimeT = System.currentTimeMillis();
-
         }
+        // argser = false;
         if ((System.currentTimeMillis() - startTime) / 1000 > 40){
             frame.setVisible(false);
             frame.dispose();
-            // Gameend(); //funsies
-
+            Gameend a = new Gameend(score,(int) (System.currentTimeMillis() - startTime) / 1000); //funsies
+            a.hi();
         } 
     }
 

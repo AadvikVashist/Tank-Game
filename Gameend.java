@@ -10,12 +10,11 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.border.Border;
 
 
 public class Gameend {
-    public static void main(String[] args) {
+    public Gameend(int x, int time){
         // ImageIcon background = new ImageIcon("Images/Startup/tank 2.jpeg");
         // ImageIcon backgrounds = new ImageIcon("Images/Startup/tank 1.jpeg");
         // Create and set up a frame window
@@ -33,17 +32,18 @@ public class Gameend {
         panel.setBorder(new EmptyBorder(new Insets(150, 200, 300, 200)));
         //panel.setBorder(new EmptyBorder(new Insets(50, 80, 50, 80)));     
         // Define new buttons
-        JButton jb1 = new JButton("<html> <strong> START MISSION </strong> </html>", new ImageIcon("start.PNG") );
-        jb1.setPreferredSize(new Dimension(800, 100));
-
+        JLabel instructions;
         //Text
-        JLabel controls = new JLabel("<html> <strong> Controls: </strong> <br/> A --> Move Left <br/> D --> Move Right <br/> W --> Increase shot power <br/> S --> Decrease shot power <br/> Left Arrow --> Rotate turret left <br/> Right Arrow --> Rotate turret right <br/> Space --> FIRE </html>");
-        JLabel instructions = new JLabel("<html> <strong> Mission: </strong> <br/> You're the final tank in your squadron. Shoot the enemy helicopter out of the air! <br/><br/><br/><br/> <br/> </html>");
-
+        if (((double)(x)/(double)time) < 0.5) {
+            instructions = new JLabel("<html> <strong> MISSION FAILURE! \n you only achieved a score of " + x + "</strong> Good luck next time soldier. </html>");
+        }
+        else {
+            instructions = new JLabel("<html> <strong> MISSION SUCCESS!  \n you achieved a score of " + x + "</strong> Well done soldier. </html>");
+        }
         //Set size and colors
         Border border = BorderFactory.createLineBorder(Color.black, 5);
 
-        instructions.setPreferredSize(new Dimension(400, 200));
+        instructions.setPreferredSize(new Dimension(200, 200));
         // instructions.setForeground(Color. RED);
         instructions.setBackground(Color.lightGray);
         instructions.setOpaque(true);
@@ -52,11 +52,6 @@ public class Gameend {
         instructions.setAlignmentX(5);
         instructions.setBorder(border);
 
-        controls.setPreferredSize(new Dimension(400, 200));
-        // instructions.setForeground(Color. RED);
-        controls.setBackground(Color.lightGray);
-        controls.setOpaque(true);
-        controls.setBorder(border);
 
         JLabel tankOne = new JLabel(new ImageIcon("tank.png")); 
         tankOne.setAlignmentX(JLabel.CENTER_ALIGNMENT);
@@ -68,26 +63,17 @@ public class Gameend {
         //panel.add(Box.createRigidArea(new Dimension(0, 60)));   
         panel.add(tankOne);  
         panel.add(instructions);
-        panel.add(controls);
         panel.add(tankTwo);
-        panel.add(jb1);
         //panel.add(Box.createRigidArea(new Dimension(0, 60)));
         // Set size for the frame
         frame.setSize(300, 300);
         // Set the window to be visible as the default to be false
         frame.add(panel);
-        jb1.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                jb1.setText("clicked");
-                //         frame.setVisible(true);
-                frame.setVisible(false);
-                TankGame.main(args); //funsies
-                
-
-            }
-        });
         frame.pack();
         frame.setVisible(true);
         
+    }
+    public void hi (){
+        System.out.println("done");
     }
 }
