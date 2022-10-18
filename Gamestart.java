@@ -38,12 +38,12 @@ public class Gamestart {
 
         //Text
         JLabel controls = new JLabel("<html> <strong> Controls: </strong> <br/> A --> Move Left <br/> D --> Move Right <br/> W --> Increase shot power <br/> S --> Decrease shot power <br/> Left Arrow --> Rotate turret left <br/> Right Arrow --> Rotate turret right <br/> Space --> FIRE </html>");
-        JLabel instructions = new JLabel("<html> <strong> Mission: </strong> <br/> You're the final tank in your squadron. Shoot the enemy helicopter out of the air! <br/><br/><br/><br/> <br/> </html>");
+        JLabel instructions = new JLabel("<html> <strong> Mission: </strong> <br/> You're the final tank in your squadron. Shoot the enemy helicopter out of the air! You have forty seconds! <br/><br/><br/><br/> <br/> </html>");
 
         //Set size and colors
         Border border = BorderFactory.createLineBorder(Color.black, 5);
 
-        instructions.setPreferredSize(new Dimension(00, 200));
+        instructions.setPreferredSize(new Dimension(400, 200));
         // instructions.setForeground(Color. RED);
         instructions.setBackground(Color.lightGray);
         instructions.setOpaque(true);

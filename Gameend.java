@@ -43,7 +43,7 @@ public class Gameend {
         //Set size and colors
         Border border = BorderFactory.createLineBorder(Color.black, 5);
 
-        instructions.setPreferredSize(new Dimension(200, 200));
+        instructions.setPreferredSize(new Dimension(800, 200));
         // instructions.setForeground(Color. RED);
         instructions.setBackground(Color.lightGray);
         instructions.setOpaque(true);
