@@ -71,7 +71,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         setPreferredSize(new Dimension(gameWidth, gameHeight));
         bg = new Background(gameWidth, gameHeight);
         player = new Tank(4.0, 100, gameHeight-100);
-        b = new Goal(500,500,80,80,200,100,60);
+        b = new Goal(500,500,120,80,200,100,60);
         startTime = System.currentTimeMillis();
     }
     
@@ -267,7 +267,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         bg.draw(g);
         b.move((System.currentTimeMillis() - startTime) /(1000), bg);
         b.draw(g);
-        final Image imager = new ImageIcon("Hoop.jpeg").getImage(); //You need this
+        final Image imager = new ImageIcon("Hoop.png").getImage(); //You need this
         g2.drawImage(imager, b.rect.x, b.rect.y, b.rect.width,b.rect.height, frame); //to this
         
         if (Objects.isNull(scores)){
@@ -295,6 +295,8 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         }
         if ((System.currentTimeMillis() - startTime) / 1000 > 20){
             frame.setVisible(false);
+            frame.dispose();
+
         } 
     }
 

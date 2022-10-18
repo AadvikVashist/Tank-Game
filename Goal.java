@@ -10,6 +10,8 @@ public class Goal {
     public double pathx;
     public double pathy;
     public int angle;
+    public boolean count;
+    public Color color;
     public Goal(){
         
     }
@@ -24,7 +26,11 @@ public class Goal {
     }
 
     public Color getColor() {
-        return new Color(randomColorNum(), randomColorNum(), randomColorNum());
+        if (count) {
+            color =  new Color(randomColorNum(), randomColorNum(), randomColorNum());
+        }
+        count = !count;
+        return color;
     }
     
     public int randomColorNum() {
@@ -62,7 +68,6 @@ public class Goal {
     public void draw(Graphics g) {
         g.setColor(getColor());
         g.fillRect(rect.x, rect.y, rect.width, rect.height);
-        g.setColor(Color.BLACK);
         // g.fillOval(centerX-5, centerY-5, 10, 10);
     
     }
