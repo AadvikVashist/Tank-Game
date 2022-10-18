@@ -67,7 +67,7 @@ public class Goal {
     
     public void draw(Graphics g) {
         g.setColor(getColor());
-        g.fillRect(rect.x, rect.y, rect.width, rect.height);
+        g.fillRect(rect.x+10, rect.y-10, rect.width-20, rect.height-20);
         // g.fillOval(centerX-5, centerY-5, 10, 10);
     
     }
