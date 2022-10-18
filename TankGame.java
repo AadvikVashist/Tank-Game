@@ -71,7 +71,7 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
         setPreferredSize(new Dimension(gameWidth, gameHeight));
         bg = new Background(gameWidth, gameHeight);
         player = new Tank(4.0, 100, gameHeight-100);
-        b = new Goal(500,500,80,80,100,100,60);
+        b = new Goal(500,500,80,80,200,100,60);
         startTime = System.currentTimeMillis();
     }
     
@@ -293,6 +293,9 @@ public class TankGame extends JPanel implements ActionListener, KeyListener {
             startTimeT = System.currentTimeMillis();
 
         }
+        if ((System.currentTimeMillis() - startTime) / 1000 > 20){
+            frame.setVisible(false);
+        } 
     }
 
 }
